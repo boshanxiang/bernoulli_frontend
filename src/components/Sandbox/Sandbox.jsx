@@ -1,51 +1,21 @@
 import {Component} from 'react';
-import Interactable from '../Interactables/Interactables'
+import Interactable from '../Interactables/Interactables';
+import {draggableOptions, resizableOptions, dropzoneOptions} from '../Interactables/InteractableOptions';
+import { AllRecordsContext } from '../Context/RecordsContext';
+import GetAllRecords from '../GetAllRecords/GetAllRecords';
+import Lines from '../Lines/Lines';
 
-import "../styles.css";
-
-const draggableOptions = {
-  onmove: event => {
-    const target = event.target;
-    // keep the dragged position in the data-x/data-y attributes
-    const x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
-    const y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
-
-    // translate the element
-    target.style.webkitTransform = target.style.transform =
-      "translate(" + x + "px, " + y + "px)";
-
-    // update the posiion attributes
-    target.setAttribute("data-x", x);
-    target.setAttribute("data-y", y);
-  }
-};
-
-const resizableOptions = {
-  edges: { top: true, left: true, bottom: true, right: true },
-  listeners: {
-    move: function (event) {
-      let { x, y } = event.target.dataset
-
-      x = (parseFloat(x) || 0) + event.deltaRect.left
-      y = (parseFloat(y) || 0) + event.deltaRect.top
-
-      Object.assign(event.target.style, {
-        width: `${event.rect.width}px`,
-        height: `${event.rect.height}px`,
-        transform: `translate(${x}px, ${y}px)`
-      })
-
-      Object.assign(event.target.dataset, { x, y })
-    }
-  }
-}
+// import "../styles.css";
 
 
 class Sandbox extends Component {
+
+  static contextType = AllRecordsContext
+
   constructor(props) {
     super(props)
     this.state = {
-
+      lines: [],
       droppedItems: []
 
     }
@@ -53,28 +23,76 @@ class Sandbox extends Component {
     this.handleDrop = this.handleDrop.bind(this);
 
   }
+
   handleDrop(event) {
     console.log("DROP", event);
   }
 
-  render() {
+  drawLines(dropzoneElement, draggedElement) {
+    let copyLines = this.state.lines
+    copyLines.push({from: dropzoneElement, to: draggedElement})
+    this.setState({lines: copyLines})
+  }
 
+  render() {
+    
     return (
-      <div className="App">
-        {this.props.legal_entities.map((legal_entity) => {
-          return(
-            <Interactable draggable={true} draggableOptions={draggableOptions} resizable={true} resizableOptions={resizableOptions} key={legal_entity.id}>
-              <div className="draggable drag-item">
-                <p>Legal Entity Name: {legal_entity.entity_name}</p>
-                <p>Legal Entity Type: {legal_entity.entity_type}</p>
-                <p>State of Formation: {legal_entity.state_of_formation}</p>
-              </div>
-            </Interactable>
-          )
-        })}
+      <div className="sandbox">
+        <GetAllRecords/>
+        <Lines lines={this.state.lines} />
+        <div>
+          {this.context.legal_entities.map((legal_entity) => {
+              return(
+              <Interactable
+                draggable={true}
+                draggableOptions={draggableOptions}
+                resizable={true}
+                resizableOptions={resizableOptions}
+                dropzone={true}
+                dropzoneOptions={dropzoneOptions}
+                key={'legal_entity' + legal_entity.id}
+              >
+                  <div
+                    className="draggable drag-item"
+                    onClick={(event) => this.context.updateShownRecord(legal_entity)
+                    }
+                    id={'legal_entity' + legal_entity.id}
+                  >
+                  <h2>{legal_entity.entity_name}</h2>
+                  <p> Entity Type: {legal_entity.entity_type}</p>
+                  <p> State of Formation: {legal_entity.state_of_formation}</p>
+                  </div>
+              </Interactable>
+              )
+          })}
+          <hr/>
+          {this.context.natural_persons.map((natural_person) => {
+              return(
+              <Interactable
+                draggable={true}
+                draggableOptions={draggableOptions}
+                resizable={true}
+                resizableOptions={resizableOptions}
+                dropzone={true}
+                dropzoneOptions={dropzoneOptions}
+                key={'natural_person' + natural_person.id}
+              >
+                  <div
+                    className="draggable drag-item"
+                    onClick={(event) => this.context.updateShownRecord(natural_person)}
+                    id={'natural_person' + natural_person.id}
+                  >
+                  <h2>{natural_person.full_name}</h2>
+                  <p> State of Residence: {natural_person.residency_state}</p>
+                  </div>
+              </Interactable>
+              )
+          })}
+        </div>
       </div>
     )
   }
 }
 
+export const drawLines = Sandbox.drawLines;
 export default Sandbox;

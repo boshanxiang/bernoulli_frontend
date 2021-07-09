@@ -1,7 +1,7 @@
 // from https://codesandbox.io/s/xl4qqqn774?file=/src/styles.css:0-1005
 // wrapper components: https://www.digitalocean.com/community/tutorials/how-to-create-wrapper-components-in-react-with-props
 
-import { Component, cloneElement } from "react";
+import React, { Component, cloneElement } from "react";
 import PropTypes from "prop-types";
 import { findDOMNode } from "react-dom";
 
@@ -56,3 +56,4 @@ Interactable.propTypes = {
   resizable: PropTypes.bool,
   resizableOptions: PropTypes.object,
 };
+
