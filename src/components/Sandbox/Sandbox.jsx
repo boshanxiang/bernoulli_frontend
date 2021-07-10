@@ -1,12 +1,11 @@
 import {Component} from 'react';
 import Interactable from '../Interactables/Interactables';
-import {draggableOptions, resizableOptions, dropzoneOptions} from '../Interactables/InteractableOptions';
+import {draggableOptions, resizableOptions} from '../Interactables/Interactables';
 import { AllRecordsContext } from '../Context/RecordsContext';
 import GetAllRecords from '../GetAllRecords/GetAllRecords';
 import Lines from '../Lines/Lines';
 
 // import "../styles.css";
-
 
 class Sandbox extends Component {
 
@@ -16,12 +15,11 @@ class Sandbox extends Component {
     super(props)
     this.state = {
       lines: [],
-      droppedItems: []
-
+      droppedItems: [],
     }
 
     this.handleDrop = this.handleDrop.bind(this);
-
+    this.drawLines = this.drawLines.bind(this);
   }
 
   handleDrop(event) {
@@ -49,8 +47,8 @@ class Sandbox extends Component {
                 resizable={true}
                 resizableOptions={resizableOptions}
                 dropzone={true}
-                dropzoneOptions={dropzoneOptions}
                 key={'legal_entity' + legal_entity.id}
+                drawLines = {this.drawLines}
               >
                   <div
                     className="draggable drag-item"
@@ -74,8 +72,8 @@ class Sandbox extends Component {
                 resizable={true}
                 resizableOptions={resizableOptions}
                 dropzone={true}
-                dropzoneOptions={dropzoneOptions}
                 key={'natural_person' + natural_person.id}
+                drawLines = {this.drawLines}
               >
                   <div
                     className="draggable drag-item"
@@ -94,5 +92,4 @@ class Sandbox extends Component {
   }
 }
 
-export const drawLines = Sandbox.drawLines;
 export default Sandbox;
