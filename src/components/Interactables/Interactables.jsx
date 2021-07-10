@@ -63,7 +63,20 @@ export default class Interactable extends Component {
     dropzoneOptions: {},
     resizableOptions: {},
     drawLines: () => {},
+    draggableRecord: {},
+    dropzoneRecord: {},
   };
+
+  inscribeDraggableRecord(record) {
+    this.setState({draggableRecord: record})
+    console.log('inscribedDraggableRecord is: ', record)
+  }
+
+  inscribeDropzoneRecord(record) {
+    this.setState({dropzoneRecord: record})
+    console.log('inscribedDropzoneRecord is: ', record)
+  }
+
 
   render() {
     return cloneElement(this.props.children, {
@@ -85,12 +98,21 @@ export default class Interactable extends Component {
   setInteractions = () => {
     if (this.props.draggable) {
       this.interact.draggable(this.props.draggableOptions)
+      .on('dragend', (event) => this.inscribeDraggableRecord(this.props.record))
     }
 
     if (this.props.dropzone) {
         this.interact.dropzone(this.props.dropzoneOptions)
-        .on('drop', (event) => {
-          this.props.drawLines(event.target, event.relatedTarget)
+        .on('drop', async (event) => {
+          await this.inscribeDropzoneRecord(this.props.record)
+          // console.log(`from within draw function, dropzoneRecord is ${this.state.dropzoneRecord}, draggableRecord is ${this.state.draggableRecord}`)
+          // console.log("Draggable: ", this.state.draggableRecord)
+          // console.log("Dropzone: ", this.state.dropzoneRecord)
+          this.props.loadRelationalRecord(this.state.dropzoneRecord, this.state.draggableRecord)
+
+          console.log("event target ID: ", event.target.id)
+          console.log("event relatedTarget ID: ", event.relatedTarget.id)
+          this.props.drawLines(event.target.id, event.relatedTarget.id)
         })
     }
 

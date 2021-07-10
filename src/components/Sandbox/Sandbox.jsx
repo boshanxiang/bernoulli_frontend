@@ -1,6 +1,8 @@
 import {Component} from 'react';
 import Interactable from '../Interactables/Interactables';
 import {draggableOptions, resizableOptions, dropzoneOptions} from '../Interactables/Interactables';
+import SteppedLineTo from 'react-lineto'; //https://github.com/kdeloach/react-lineto/blob/master/README.md#steppedlineto
+
 import { AllRecordsContext } from '../Context/RecordsContext';
 import GetAllRecords from '../GetAllRecords/GetAllRecords';
 import Lines from '../Lines/Lines';
@@ -15,25 +17,29 @@ class Sandbox extends Component {
     super(props)
     this.state = {
       lines: [],
-      droppedItems: [],
     }
 
-    this.handleDrop = this.handleDrop.bind(this);
+    this.steppedLineKeyCount = 0;
+
+    this.getSteppedLineKey = this.getSteppedLineKey.bind(this);
     this.drawLines = this.drawLines.bind(this);
+    this.loadRelationalRecord = this.loadRelationalRecord.bind(this);
+  }
+ 
+  getSteppedLineKey(){
+    return `SteppedLine${this.keyCount++}`
   }
 
-  handleDrop(event) {
-    console.log("DROP", event);
-  }
-
-  drawLines(dropzone, draggable) {
-    console.log(dropzone)
-    console.log(draggable)
+  drawLines(dropzoneElementID, draggableElementID) {
     // console.log(`dropped ${draggable} on ${dropzone}`)
-    // let copyLines = this.state.lines;
-    // copyLines.push({'from': draggable, 'to': dropzone});
-    // console.log(`copyLines: ${copyLines}`)
-    // this.setState({lines: copyLines});
+    let copyLines = this.state.lines;
+    copyLines.push({'from': dropzoneElementID, 'to': draggableElementID});
+    console.log(`copyLines: ${copyLines}`)
+    this.setState({lines: copyLines});
+  }
+
+  loadRelationalRecord(dropzoneRecord, draggableRecord) {
+    return
   }
 
   render() {
@@ -41,25 +47,55 @@ class Sandbox extends Component {
     return (
       <div className="sandbox">
         <GetAllRecords/>
-        <div>
+        {this.state.lines
+                .map(
+                    (line) => {
+                        console.log(`SteppedLine from ${line.from} to ${line.to}`)
+                        return(
+                                <SteppedLineTo
+                                    key={this.getSteppedLineKey()}
+                                    className='stepped_line'
+
+                                    from={line.from}
+                                    to={line.to}
+
+                                    zindex={-1}
+                                    orientation='v'
+
+                                    fromAnchor='bottom center'
+                                    toAnchor='top center'
+                                    
+                                />
+                        )
+                    }
+                )
+            }        <div>
           {this.context.legal_entities.map((legal_entity) => {
               return(
               <Interactable
+                key={'legal_entity' + legal_entity.id}  
+                
                 draggable={true}
                 draggableOptions={draggableOptions}
                 resizable={true}
                 resizableOptions={resizableOptions}
                 dropzone={true}
                 dropzoneOptions={dropzoneOptions}
-                key={'legal_entity' + legal_entity.id}
+
                 record={legal_entity}
+                // inscribeDraggableRecord = {this.inscribeDraggableRecord}
+                // inscribeDropzoneRecord = {this.inscribeDropzoneRecord}
+                
                 drawLines={this.drawLines}
+                loadRelationalRecord={this.loadRelationalRecord}
+
+                // style={{zIndex:1}}
               >
                   <div
-                    className="draggable drag-item"
-                    onClick={(event) => this.context.updateShownRecord(legal_entity)
-                    }
+                    className={`draggable drag-item legal_entity${legal_entity.id}`}
+                    onClick={(event) => this.context.updateShownRecord(legal_entity)}
                     id={'legal_entity' + legal_entity.id}
+                    style={{zIndex:1}}
                   >
                   <h2>{legal_entity.entity_name}</h2>
                   <p> Entity Type: {legal_entity.entity_type}</p>
@@ -72,20 +108,29 @@ class Sandbox extends Component {
           {this.context.natural_persons.map((natural_person) => {
               return(
               <Interactable
+  
+                key={'natural_person' + natural_person.id}
+
                 draggable={true}
                 draggableOptions={draggableOptions}
                 resizable={true}
                 resizableOptions={resizableOptions}
                 dropzone={true}
                 dropzoneOptions={dropzoneOptions}
-                key={'natural_person' + natural_person.id}
+    
                 record={natural_person}
+                // inscribeDraggableRecord = {this.inscribeDraggableRecord}
+                // inscribeDropzoneRecord = {this.inscribeDropzoneRecord}
+
                 drawLines={this.drawLines}
+                loadRelationalRecord={this.loadRelationalRecord}
+
+                // style={{zIndex:1}}
               >
                   <div
-                    className="draggable drag-item"
+                    className={`draggable drag-item natural_person${natural_person.id}`}
                     onClick={(event) => this.context.updateShownRecord(natural_person)}
-                    id={'natural_person' + natural_person.id}
+                    style={{zIndex:1}}
                   >
                   <h2>{natural_person.full_name}</h2>
                   <p> State of Residence: {natural_person.residency_state}</p>
