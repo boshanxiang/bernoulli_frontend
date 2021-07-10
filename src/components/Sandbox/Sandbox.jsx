@@ -1,6 +1,6 @@
 import {Component} from 'react';
 import Interactable from '../Interactables/Interactables';
-import {draggableOptions, resizableOptions} from '../Interactables/Interactables';
+import {draggableOptions, resizableOptions, dropzoneOptions} from '../Interactables/Interactables';
 import { AllRecordsContext } from '../Context/RecordsContext';
 import GetAllRecords from '../GetAllRecords/GetAllRecords';
 import Lines from '../Lines/Lines';
@@ -26,10 +26,14 @@ class Sandbox extends Component {
     console.log("DROP", event);
   }
 
-  drawLines(dropzoneElement, draggedElement) {
-    let copyLines = this.state.lines
-    copyLines.push({from: dropzoneElement, to: draggedElement})
-    this.setState({lines: copyLines})
+  drawLines(dropzone, draggable) {
+    console.log(dropzone)
+    console.log(draggable)
+    // console.log(`dropped ${draggable} on ${dropzone}`)
+    // let copyLines = this.state.lines;
+    // copyLines.push({'from': draggable, 'to': dropzone});
+    // console.log(`copyLines: ${copyLines}`)
+    // this.setState({lines: copyLines});
   }
 
   render() {
@@ -37,7 +41,6 @@ class Sandbox extends Component {
     return (
       <div className="sandbox">
         <GetAllRecords/>
-        <Lines lines={this.state.lines} />
         <div>
           {this.context.legal_entities.map((legal_entity) => {
               return(
@@ -47,8 +50,10 @@ class Sandbox extends Component {
                 resizable={true}
                 resizableOptions={resizableOptions}
                 dropzone={true}
+                dropzoneOptions={dropzoneOptions}
                 key={'legal_entity' + legal_entity.id}
-                drawLines = {this.drawLines}
+                record={legal_entity}
+                drawLines={this.drawLines}
               >
                   <div
                     className="draggable drag-item"
@@ -72,8 +77,10 @@ class Sandbox extends Component {
                 resizable={true}
                 resizableOptions={resizableOptions}
                 dropzone={true}
+                dropzoneOptions={dropzoneOptions}
                 key={'natural_person' + natural_person.id}
-                drawLines = {this.drawLines}
+                record={natural_person}
+                drawLines={this.drawLines}
               >
                   <div
                     className="draggable drag-item"

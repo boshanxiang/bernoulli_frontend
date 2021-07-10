@@ -44,15 +44,25 @@ export const resizableOptions = {
   }
 }
 
+export const dropzoneOptions = {
+  accept: '.draggable, .drag-item',
+  overlap: 'pointer',
+  ondrop: function(event) {
+      event.target.classList.add('drop-activated');
+      event.relatedTarget.classList.add('drop-activated');
+      // this.props.drawLines(event.target.id, event.relatedTarget.id);
+  }
+}
+
 export default class Interactable extends Component {
   static defaultProps = {
     draggable: false,
     dropzone: false,
     resizable: false,
     draggableOptions: {},
-    // dropzoneOptions: {},
+    dropzoneOptions: {},
     resizableOptions: {},
-    drawLines: () => {}
+    drawLines: () => {},
   };
 
   render() {
@@ -72,21 +82,15 @@ export default class Interactable extends Component {
     this.setInteractions();
   }
 
-  setInteractions() {
+  setInteractions = () => {
     if (this.props.draggable) {
       this.interact.draggable(this.props.draggableOptions)
     }
 
     if (this.props.dropzone) {
-        this.interact.dropzone(
-          {
-            accept: '.draggable, .drag-item',
-            overlap: 'pointer',
-            ondrop: (event) => {
-                event.target.classList.add('drop-activated');
-                event.relatedTarget.classList.add('drop-activated');
-                this.props.drawLines(event.target.id, event.relatedTarget.id);
-            }
+        this.interact.dropzone(this.props.dropzoneOptions)
+        .on('drop', (event) => {
+          this.props.drawLines(event.target, event.relatedTarget)
         })
     }
 
@@ -101,9 +105,10 @@ Interactable.propTypes = {
   draggable: PropTypes.bool,
   draggableOptions: PropTypes.object,
   dropzone: PropTypes.bool,
-  // dropzoneOptions: PropTypes.object,
+  dropzoneOptions: PropTypes.object,
   resizable: PropTypes.bool,
   resizableOptions: PropTypes.object,
+  record: PropTypes.object,
   drawLines: PropTypes.func,
 };
 
