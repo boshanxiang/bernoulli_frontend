@@ -66,21 +66,22 @@ class CreateBox extends Component {
         return (
             <div>
                 <h3>Edit the above entry</h3>
-                <label>
-                    Entity
-                    {(this.state.entity) ? 
-                        <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: true})} checked />
-                        :
-                        <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: true})} />
-                    }
-                    Person
-                    {(this.state.entity) ? 
-                        <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: false})} />
-                        :
-                        <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: false})} checked/>
-                    }
-                </label>
                 <form onSubmit = {this.handleSubmit}>
+                    <label>
+                        Entity
+                        {(this.state.entity) ? 
+                            <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: true})} checked />
+                            :
+                            <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: true})} />
+                        }
+                        Person
+                        {(this.state.entity) ? 
+                            <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: false})} />
+                            :
+                            <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: false})} checked/>
+                        }
+                    </label>
+                    <br/>
                     <label htmlFor="name">Name: </label>
                     <input type="text" id="name" name="name" onChange={ this.handleChange } value={ this.state.name } value={this.state.name} />
                     <br/>

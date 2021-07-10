@@ -1,11 +1,12 @@
 import {Component} from 'react';
 import Interactable from '../Interactables/Interactables';
 import {draggableOptions, resizableOptions, dropzoneOptions} from '../Interactables/Interactables';
-import SteppedLineTo from 'react-lineto'; //https://github.com/kdeloach/react-lineto/blob/master/README.md#steppedlineto
 
 import { AllRecordsContext } from '../Context/RecordsContext';
 import GetAllRecords from '../GetAllRecords/GetAllRecords';
-import Lines from '../Lines/Lines';
+
+import {SteppedLineTo} from 'react-lineto'; //https://github.com/kdeloach/react-lineto/blob/master/README.md#steppedlineto
+import PropTypes from 'prop-types'
 
 // import "../styles.css";
 
@@ -31,11 +32,15 @@ class Sandbox extends Component {
   }
 
   drawLines(dropzoneElementID, draggableElementID) {
-    // console.log(`dropped ${draggable} on ${dropzone}`)
-    let copyLines = this.state.lines;
-    copyLines.push({'from': dropzoneElementID, 'to': draggableElementID});
-    console.log(`copyLines: ${copyLines}`)
-    this.setState({lines: copyLines});
+    let findIndex = this.state.lines.findIndex((line) => {
+      return ((line.from == dropzoneElementID) && (line.to == draggableElementID))
+    })
+    if(findIndex < 0) {
+      let copyLines = this.state.lines;
+      let revisedLines = [...copyLines, {'from': dropzoneElementID, 'to': draggableElementID}]
+      // console.log(`revisedLines: ${revisedLines}`)
+      this.setState({lines: revisedLines});
+    }
   }
 
   loadRelationalRecord(dropzoneRecord, draggableRecord) {
@@ -43,6 +48,14 @@ class Sandbox extends Component {
   }
 
   render() {
+
+    const steppedLineStyle = {
+      delay: true,
+      borderColor: 'black',
+      borderStyle: 'solid',
+      borderWidth: 3,
+    }; 
+    // Style const is for stepped lines
     
     return (
       <div className="sandbox">
@@ -52,24 +65,25 @@ class Sandbox extends Component {
                     (line) => {
                         console.log(`SteppedLine from ${line.from} to ${line.to}`)
                         return(
-                                <SteppedLineTo
-                                    key={this.getSteppedLineKey()}
-                                    className='stepped_line'
+                          <SteppedLineTo
+                              key={this.getSteppedLineKey()}
 
-                                    from={line.from}
-                                    to={line.to}
+                              from={line.from}
+                              to={line.to}
 
-                                    zindex={-1}
-                                    orientation='v'
+                              zindex={-1}
 
-                                    fromAnchor='bottom center'
-                                    toAnchor='top center'
-                                    
-                                />
+                              fromAnchor='bottom center'
+                              toAnchor='top center'
+
+                              {...steppedLineStyle}
+
+                          />
                         )
                     }
                 )
-            }        <div>
+            }
+          <h3>Legal Entities</h3>
           {this.context.legal_entities.map((legal_entity) => {
               return(
               <Interactable
@@ -104,7 +118,8 @@ class Sandbox extends Component {
               </Interactable>
               )
           })}
-          <hr/>
+          <br/>
+          <h3>Natural Persons</h3>
           {this.context.natural_persons.map((natural_person) => {
               return(
               <Interactable
@@ -130,6 +145,7 @@ class Sandbox extends Component {
                   <div
                     className={`draggable drag-item natural_person${natural_person.id}`}
                     onClick={(event) => this.context.updateShownRecord(natural_person)}
+                    id={'natural_person' + natural_person.id}
                     style={{zIndex:1}}
                   >
                   <h2>{natural_person.full_name}</h2>
@@ -138,10 +154,43 @@ class Sandbox extends Component {
               </Interactable>
               )
           })}
-        </div>
       </div>
     )
   }
 }
 
 export default Sandbox;
+
+
+
+// ##############################################################################
+// ##############################################################################
+// ##############################################################################
+// Stepped Line (https://github.com/kdeloach/react-lineto/blob/master/demo/index.jsx)
+
+class Block extends Component {
+  render() {
+      const { top, left, color, className } = this.props;
+      const style = { top, left, backgroundColor: color };
+      return (
+          <div
+              className={`block ${className}`}
+              style={style}
+              onMouseOver={this.props.onMouseOver}
+              onMouseOut={this.props.onMouseOut}
+          >
+              {this.props.children}
+          </div>
+      );
+  }
+}
+
+Block.propTypes = {
+  children: PropTypes.any,
+  onMouseOver: PropTypes.func,
+  onMouseOut: PropTypes.func,
+  top: PropTypes.string,
+  left: PropTypes.string,
+  color: PropTypes.string,
+  className: PropTypes.string,
+};

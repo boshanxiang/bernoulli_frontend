@@ -46,11 +46,11 @@ class NavPanel extends Component {
                 <></>
             }
             {(this.state.viewEdit) ? 
-                <EditBox />
+                <EditBox handleUpdateRecord={this.props.handleUpdateRecord}/>
                 :
                 (
                     (this.state.viewCreate) ? 
-                        <CreateBox />
+                        <CreateBox handleAddRecord={this.props.handleAddRecord} />
                         :
                         <></>
                 )

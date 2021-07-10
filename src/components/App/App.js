@@ -21,6 +21,9 @@ class App extends Component {
       director_relations: [],
       shown_record: {}
     }
+    
+    this.handleAddRecord = this.handleAddRecord.bind(this)
+    this.handleUpdateRecord = this.handleUpdateRecord.bind(this)
   }
 
   getLegalEntities = () => {
@@ -89,8 +92,36 @@ class App extends Component {
       this.getDirectorRelations()
   }
 
+
   updateShownRecord = (record) => {
     this.setState({shown_record: record})
+  }
+
+  handleAddRecord(record) {
+    if(record.entity_name){
+      let copyLegalEntities = this.state.legal_entities
+      let revisedLegalEntities = [...copyLegalEntities, record]
+      this.setState({legal_entities: revisedLegalEntities})
+
+    } else if(record.full_name) {
+      let copyNaturalPersons = this.state.natural_persons
+      let revisedNaturalPersons = [...copyNaturalPersons, record]
+      this.setState({natural_persons: revisedNaturalPersons})
+    }
+  }
+
+  handleUpdateRecord(record) {
+    if(record.entity_name){
+      let copyLegalEntities = this.state.legal_entities
+      let revisedLegalEntities = [...copyLegalEntities, record]
+      this.setState({legal_entities: revisedLegalEntities})
+
+    } else if(record.full_name) {
+      let copyNaturalPersons = this.state.natural_persons
+      let revisedNaturalPersons = [...copyNaturalPersons, record]
+      this.setState({natural_persons: revisedNaturalPersons})
+    }
+
   }
 
   componentDidMount = () => {
@@ -114,7 +145,10 @@ class App extends Component {
             updateShownRecord: (record) => this.updateShownRecord(record),
           }}>
           <div className="App">
-            <NavPanel/>
+            <NavPanel
+              handleAddRecord={this.handleAddRecord}
+              handleUpdateRecord={this.handleUpdateRecord}
+            />
             <Sandbox/>
           </div>
       </AllRecordsContext.Provider>
