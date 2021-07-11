@@ -32,11 +32,17 @@ class App extends Component {
       director_relations: [],
 
       shown_record: {},
+      show_relational_create: false,
+      dropzone_record: {},
+      draggable_record: {},
+      dropzone_target_ID: '',
+      draggable_target_ID: '',
 
       ownership_lines: [],
       employment_lines: [],
       officer_lines: [],
       director_lines: [],
+      
     }
     
     this.handleAddRecord = this.handleAddRecord.bind(this)
@@ -123,7 +129,7 @@ class App extends Component {
       this.getDirectorRelations()
   }
   
-  // State management functions
+  // State management functions for NavPanel show
 
   updateShownRecord = (record) => {
     this.setState({shown_record: record})
@@ -132,6 +138,27 @@ class App extends Component {
   clearShownRecord = () => {
     this.setState({shown_record: {} })
   }
+
+  loadRelationalRecords = (dropzoneRecord, draggableRecord, dropzoneTargetID, draggableTargetID) => {
+    this.setState({
+        dropzone_record: dropzoneRecord,
+        draggable_record: draggableRecord,
+        dropzone_target_ID: dropzoneTargetID,
+        draggable_target_ID: draggableTargetID,
+        show_relational_create: true,
+      })
+  }
+
+
+  // inscribeDraggableRecord = (draggableRecord) => {
+  //   this.setState({draggable_record: draggableRecord})
+  // }
+
+  // inscribeDropzoneRecord= (dropzoneRecord) => {
+  //   this.setState({dropzone_record: dropzoneRecord})
+  // }
+
+  // State management functions for NavPanel manipulations
 
   handleAddRecord(record) {
     console.log("record: ", record)
@@ -288,7 +315,13 @@ class App extends Component {
             // state entry for NavPanel shown record
 
             shown_record: this.state.shown_record,
+            show_relational_create: this.state.show_relational_create,
+            dropzone_record: this.state.dropzone_record,
+            draggable_record: this.state.draggable_record,
+            dropzone_target_ID: this.state.dropzone_target_ID,
+            draggable_target_ID: this.state.draggable_target_ID,      
             updateShownRecord: (record) => this.updateShownRecord(record),
+            loadRelationalRecords: this.loadRelationalRecords,
 
             // state entries for lines rendering
             ownership_lines: this.state.ownership_lines,
@@ -309,6 +342,9 @@ class App extends Component {
               handleDeleteRecord={this.handleDeleteRecord}
               updateShownRecord={this.updateShownRecord}
               clearShownRecord={this.clearShownRecord}
+
+              // inscribeDraggableRecord={this.inscribeDraggableRecord}
+              // inscribeDropzoneRecord={this.inscribeDropzoneRecord}
             />
             <Sandbox/>
           </div>

@@ -20,7 +20,6 @@ class Sandbox extends Component {
     }
 
     this.drawLines = this.drawLines.bind(this);
-    this.loadRelationalRecord = this.loadRelationalRecord.bind(this);
   }
 
   drawLines(dropzoneElementID, draggableElementID) {
@@ -33,10 +32,6 @@ class Sandbox extends Component {
       // console.log(`revisedLines: ${revisedLines}`)
       this.setState({lines: revisedLines});
     }
-  }
-
-  loadRelationalRecord(dropzoneRecord, draggableRecord) {
-    return
   }
 
   render() {
@@ -60,11 +55,10 @@ class Sandbox extends Component {
                 dropzoneOptions={dropzoneOptions}
     
                 record={natural_person}
-                // inscribeDraggableRecord = {this.inscribeDraggableRecord}
-                // inscribeDropzoneRecord = {this.inscribeDropzoneRecord}
+                // inscribeDraggableRecord = {this.props.inscribeDraggableRecord}
+                // inscribeDropzoneRecord = {this.props.inscribeDropzoneRecord}
 
                 drawLines={this.drawLines}
-                loadRelationalRecord={this.loadRelationalRecord}
 
                 style={{zIndex:'1'}}
               >
@@ -81,7 +75,7 @@ class Sandbox extends Component {
               )
           })}
           <br/>
-
+{/* 
         <LinesRender
           elements={this.context.ownership_lines}
           stringprefix='ownership_line'
@@ -97,7 +91,7 @@ class Sandbox extends Component {
         <LinesRender
           elements={this.context.director_lines}
           stringprefix='director_line'
-        />
+        /> */}
           <br/>
 
           <h3>Legal Entities</h3>
@@ -114,11 +108,10 @@ class Sandbox extends Component {
                 dropzoneOptions={dropzoneOptions}
 
                 record={legal_entity}
-                // inscribeDraggableRecord = {this.inscribeDraggableRecord}
-                // inscribeDropzoneRecord = {this.inscribeDropzoneRecord}
+                inscribeDraggableRecord = {this.props.inscribeDraggableRecord}
+                inscribeDropzoneRecord = {this.props.inscribeDropzoneRecord}
                 
                 drawLines={this.drawLines}
-                loadRelationalRecord={this.loadRelationalRecord}
 
                 style={{zIndex:'1'}}
               >

@@ -4,6 +4,8 @@
 import React, { Component, cloneElement } from "react";
 import PropTypes from "prop-types";
 import { findDOMNode } from "react-dom";
+import { AllRecordsContext } from "./RecordsContext";
+
 
 import interact from "interactjs";
 
@@ -55,6 +57,14 @@ export const dropzoneOptions = {
 }
 
 export default class Interactable extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      draggableRecord: {},
+      dropzoneRecord: {},
+    }
+  }
   static defaultProps = {
     draggable: false,
     dropzone: false,
@@ -63,20 +73,28 @@ export default class Interactable extends Component {
     dropzoneOptions: {},
     resizableOptions: {},
     drawLines: () => {},
-    draggableRecord: {},
-    dropzoneRecord: {},
+
   };
+
+  static contextType = AllRecordsContext
 
   inscribeDraggableRecord(record) {
     this.setState({draggableRecord: record})
-    console.log('inscribedDraggableRecord is: ', record)
+    // console.log('inscribedDraggableRecord is: ', this.state.draggableRecord)
   }
 
-  inscribeDropzoneRecord(record) {
-    this.setState({dropzoneRecord: record})
-    console.log('inscribedDropzoneRecord is: ', record)
+  inscribeDropzoneRecord(record, dropzoneTargetID, draggableTargetID) {
+    this.setState(
+      {dropzoneRecord: record},
+      this.context.loadRelationalRecords(
+        this.state.dropzoneRecord,
+        this.state.draggableRecord,
+        dropzoneTargetID,
+        draggableTargetID,
+      )
+    )
+    // console.log('inscribedDropzoneRecord is: ', this.state.dropzoneRecord)
   }
-
 
   render() {
     return cloneElement(this.props.children, {
@@ -104,15 +122,10 @@ export default class Interactable extends Component {
     if (this.props.dropzone) {
         this.interact.dropzone(this.props.dropzoneOptions)
         .on('drop', async (event) => {
-          await this.inscribeDropzoneRecord(this.props.record)
+          await this.inscribeDropzoneRecord(this.props.record, event.target.id, event.relatedTarget.id)
           // console.log(`from within draw function, dropzoneRecord is ${this.state.dropzoneRecord}, draggableRecord is ${this.state.draggableRecord}`)
           // console.log("Draggable: ", this.state.draggableRecord)
           // console.log("Dropzone: ", this.state.dropzoneRecord)
-          this.props.loadRelationalRecord(this.state.dropzoneRecord, this.state.draggableRecord)
-
-          console.log("event target ID: ", event.target.id)
-          console.log("event relatedTarget ID: ", event.relatedTarget.id)
-          this.props.drawLines(event.target.id, event.relatedTarget.id)
         })
     }
 
