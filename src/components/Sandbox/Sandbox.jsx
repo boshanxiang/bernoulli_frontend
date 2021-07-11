@@ -33,7 +33,7 @@ class Sandbox extends Component {
 
   drawLines(dropzoneElementID, draggableElementID) {
     let findIndex = this.state.lines.findIndex((line) => {
-      return ((line.from == dropzoneElementID) && (line.to == draggableElementID))
+      return ((line.from === dropzoneElementID) && (line.to === draggableElementID))
     })
     if(findIndex < 0) {
       let copyLines = this.state.lines;
@@ -160,37 +160,3 @@ class Sandbox extends Component {
 }
 
 export default Sandbox;
-
-
-
-// ##############################################################################
-// ##############################################################################
-// ##############################################################################
-// Stepped Line (https://github.com/kdeloach/react-lineto/blob/master/demo/index.jsx)
-
-class Block extends Component {
-  render() {
-      const { top, left, color, className } = this.props;
-      const style = { top, left, backgroundColor: color };
-      return (
-          <div
-              className={`block ${className}`}
-              style={style}
-              onMouseOver={this.props.onMouseOver}
-              onMouseOut={this.props.onMouseOut}
-          >
-              {this.props.children}
-          </div>
-      );
-  }
-}
-
-Block.propTypes = {
-  children: PropTypes.any,
-  onMouseOver: PropTypes.func,
-  onMouseOut: PropTypes.func,
-  top: PropTypes.string,
-  left: PropTypes.string,
-  color: PropTypes.string,
-  className: PropTypes.string,
-};

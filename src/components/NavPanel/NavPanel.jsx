@@ -1,9 +1,13 @@
 import {Component} from 'react'
+import axios from 'axios';
+
 import "../styles.css";
 import { AllRecordsContext } from '../Context/RecordsContext';
 import ShowBox from '../ShowBox/ShowBox';
 import EditBox from '../EditBox/EditBox';
 import CreateBox from '../CreateBox/CreateBox';
+
+const baseURL = 'http://localhost:8000/'
 
 class NavPanel extends Component {
 
@@ -18,6 +22,8 @@ class NavPanel extends Component {
 
     static contextType = AllRecordsContext
 
+    // Functions to toggle panel shows
+
     toggleCreate = () => {
         this.setState({viewCreate: true, viewEdit: false})
     }
@@ -25,10 +31,17 @@ class NavPanel extends Component {
     toggleEdit = () => {
         this.setState({viewEdit: true, viewCreate: false})
     }
-    
-    // FUNCTION FOR DELETING
-    deleteEntry = (entry) => {
-        return
+
+    // Function to delete db record
+
+    deleteRecord(record) {
+        let recordType = 'naturalpersons'
+        if(record.entity_name) {
+        recordType = 'legalentities'
+        }
+        axios
+        .delete(`${baseURL}${recordType}/${record.id}/`)
+        .then((res) => this.props.handleDeleteRecord(record))
     }
 
     render() {
@@ -36,17 +49,26 @@ class NavPanel extends Component {
         return (
         <div className="list_container">
             <ShowBox />
-            <button onClick={this.toggleCreate}>New Entry</button>
+            <button onClick={() => this.toggleCreate()}>New Entry</button>
             {(this.context.shown_record.entity_name || this.context.shown_record.full_name) ?
-                <span>
-                    <button onClick={this.toggleEdit}>Edit Entry</button>
-                    <button onClick={this.deleteEntry}>*Delete Entry*</button>
-                </span>
+                <div>
+                    <button onClick={() => this.toggleEdit()}>Edit Entry</button>
+                    <button onClick={
+                        () => {
+                            this.deleteRecord(this.context.shown_record);
+                            this.props.clearShownRecord();
+                            console.log("You clicked on Delete!")
+                        }}
+                    >*Delete Entry*</button>
+                </div>
                 :
                 <></>
             }
             {(this.state.viewEdit) ? 
-                <EditBox handleUpdateRecord={this.props.handleUpdateRecord}/>
+                <EditBox
+                    handleUpdateRecord={this.props.handleUpdateRecord}
+                    updateShownRecord={this.props.updateShownRecord}
+                />
                 :
                 (
                     (this.state.viewCreate) ? 

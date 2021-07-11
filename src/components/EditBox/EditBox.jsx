@@ -1,5 +1,9 @@
 import {Component} from 'react'
+import axios from 'axios';
+
 import { AllRecordsContext } from '../Context/RecordsContext';
+import { getCurrentDate } from '../Utils/CurrentDate';
+
 import "../styles.css";
 
 const baseURL = 'http://localhost:8000/'
@@ -9,9 +13,11 @@ class CreateBox extends Component {
         super(props)
         this.state = {
             entity: null,
+            id: '',
             name: '',
             state: '',
-            entitytype: ''
+            entitytype: '',
+            last_updated: '',
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -23,16 +29,22 @@ class CreateBox extends Component {
     componentDidMount() {
         if(this.context.shown_record.entity_name){
             this.setState({
+                id: this.context.shown_record.id,
                 entity: true,
                 name: this.context.shown_record.entity_name,
                 state: this.context.shown_record.state_of_formation,
-                entitytype: this.context.shown_record.entity_type
+                entitytype: this.context.shown_record.entity_type,
+                last_updated: getCurrentDate(),
+
             })
         } else if(this.context.shown_record.full_name){
             this.setState({
+                id: this.context.shown_record.id,
                 entity: false,
                 name: this.context.shown_record.full_name,
-                state: this.context.shown_record.residency_state
+                state: this.context.shown_record.residency_state,
+                last_updated: getCurrentDate(),
+                
             })
         } else {
             return
@@ -44,6 +56,42 @@ class CreateBox extends Component {
     }
 
     handleSubmit(event) {
+
+        let postObject;
+        let recordType;
+
+        if(this.state.entity === true) {
+            recordType = 'legalentities';
+
+            postObject = {
+                entity_name: this.state.name,
+                entity_type: this.state.entitytype,
+                state_of_formation: this.state.state,
+                last_updated: this.state.last_updated,
+            }
+        } else if (this.state.entity === false) {
+            recordType = 'naturalpersons';
+
+            postObject = {
+                full_name: this.state.name,
+                residency_state: this.state.state,
+                last_updated: this.state.last_updated,
+            }
+        }
+
+        axios
+        .put(
+          `${baseURL}${recordType}/${this.context.shown_record.id}/`,
+          postObject,
+          {headers: {
+            'Content-Type': 'application/json'
+          }}
+        )
+        .then((res) => {
+            this.props.handleUpdateRecord(res.data);
+            this.props.updateShownRecord(res.data)
+        })
+
         // event.preventDefault()
         // fetch(baseURL + `${this.state.entity}`, {
         //   method: 'POST',
@@ -70,7 +118,7 @@ class CreateBox extends Component {
                     <label>
                         Entity
                         {(this.state.entity) ? 
-                            <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: true})} checked />
+                            <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: true})} defaultChecked />
                             :
                             <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: true})} />
                         }
@@ -78,7 +126,7 @@ class CreateBox extends Component {
                         {(this.state.entity) ? 
                             <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: false})} />
                             :
-                            <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: false})} checked/>
+                            <input type="radio" id="entity" name="entity" onClick={() => this.setState({entity: false})} defaultChecked/>
                         }
                     </label>
                     <br/>
@@ -97,7 +145,10 @@ class CreateBox extends Component {
                         :
                         <></>
                     }
-                    <input type="submit" value="Create Entity/Person" />
+                    <label htmlFor="last_updated">Last updated (YYYY-MM-DD):</label>
+                    <input type="text" id="last_updated" name="last_updated" onChange={ this.handleChange } value={ this.state.last_updated } value={this.state.last_updated}/>
+                    <br/>
+                    <input type="submit" value="Update Entity/Person" />
                 </form>
             </div>
         )

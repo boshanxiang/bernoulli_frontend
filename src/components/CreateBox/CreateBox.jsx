@@ -1,5 +1,9 @@
 import {Component} from 'react'
+import axios from 'axios';
+
 import { AllRecordsContext } from '../Context/RecordsContext';
+import { getCurrentDate } from '../Utils/CurrentDate';
+
 import "../styles.css";
 
 const baseURL = 'http://localhost:8000/'
@@ -11,7 +15,8 @@ class CreateBox extends Component {
             entity: null,
             name: '',
             state: '',
-            entitytype: ''
+            entitytype: '',
+            last_updated: '',
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -20,47 +25,66 @@ class CreateBox extends Component {
     }
     static contextType = AllRecordsContext
 
+    componentDidMount() {
+        this.setState({last_updated: getCurrentDate()})
+    }
+
     handleChange(event) {
         this.setState({ [event.currentTarget.id]: event.currentTarget.value })
     }
 
     handleSubmit(event) {
-        event.preventDefault()
 
-        let recordType;
         let postObject;
-        if(this.state.entity == true) {
-            recordType = 'legalentities'
+        let recordType;
+
+        if(this.state.entity === true) {
+            recordType = 'legalentities';
+
             postObject = {
                 entity_name: this.state.name,
                 entity_type: this.state.entitytype,
                 state_of_formation: this.state.state,
+                last_updated: this.state.last_updated,
             }
-        } else if (this.state.entity == false) {
-            recordType = 'naturalpersons'
+        } else if (this.state.entity === false) {
+            recordType = 'naturalpersons';
+
             postObject = {
                 full_name: this.state.name,
                 residency_state: this.state.state,
+                last_updated: this.state.last_updated,
             }
         }
 
-        fetch(baseURL + recordType, {
-          method: 'POST',
-          body: JSON.stringify(postObject),
-          headers: {
+        axios
+        .post(
+          `${baseURL}${recordType}/`,
+          postObject,
+          {headers: {
             'Content-Type': 'application/json'
-          }
-        }).then(res => res.json())
-          .then(resJson => {
-            this.props.handleAddRecord(resJson)
-            this.setState({
-                entity: null,
-                name: '',
-                state: '',
-                entitytype: ''
-            })
-          })
-          .catch(error => console.log({ 'Error': error }))
+          }}
+        )
+        .then((res) => this.props.handleAddRecord(res.data))
+
+        // event.preventDefault()
+        // fetch(baseURL + recordType, {
+        //   method: 'POST',
+        //   body: JSON.stringify(postObject),
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   }
+        // }).then(res => res.json())
+        //   .then(resJson => {
+        //     this.props.handleAddRecord(resJson)
+        //     this.setState({
+        //         entity: null,
+        //         name: '',
+        //         state: '',
+        //         entitytype: ''
+        //     })
+        //   })
+        //   .catch(error => console.log({ 'Error': error }))
     }
 
     render() {
@@ -91,6 +115,9 @@ class CreateBox extends Component {
                         :
                         <></>
                     }
+                    <label htmlFor="last_updated">Last updated (YYYY-MM-DD):</label>
+                    <input type="text" id="last_updated" name="last_updated" onChange={ this.handleChange } value={ this.state.last_updated } value={this.state.last_updated}/>
+                    <br/>
                     <input type="submit" value="Create Entity/Person" />
                 </form>
             </div>
