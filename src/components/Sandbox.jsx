@@ -108,8 +108,8 @@ class Sandbox extends Component {
                 dropzoneOptions={dropzoneOptions}
 
                 record={legal_entity}
-                inscribeDraggableRecord = {this.props.inscribeDraggableRecord}
-                inscribeDropzoneRecord = {this.props.inscribeDropzoneRecord}
+                // inscribeDraggableRecord = {this.props.inscribeDraggableRecord}
+                // inscribeDropzoneRecord = {this.props.inscribeDropzoneRecord}
                 
                 drawLines={this.drawLines}
 

@@ -57,14 +57,21 @@ export const dropzoneOptions = {
 }
 
 export default class Interactable extends Component {
+  
+  static contextType = AllRecordsContext
+
   constructor(props) {
     super(props)
 
     this.state = {
-      draggableRecord: {},
       dropzoneRecord: {},
+      draggableRecord: {},
+      dropzoneTargetID: '',
+      draggableTargetID: '',
+
     }
   }
+
   static defaultProps = {
     draggable: false,
     dropzone: false,
@@ -72,11 +79,8 @@ export default class Interactable extends Component {
     draggableOptions: {},
     dropzoneOptions: {},
     resizableOptions: {},
-    drawLines: () => {},
 
   };
-
-  static contextType = AllRecordsContext
 
   inscribeDraggableRecord(record) {
     this.setState({draggableRecord: record})
@@ -85,13 +89,22 @@ export default class Interactable extends Component {
 
   inscribeDropzoneRecord(record, dropzoneTargetID, draggableTargetID) {
     this.setState(
-      {dropzoneRecord: record},
-      this.context.loadRelationalRecords(
-        this.state.dropzoneRecord,
-        this.state.draggableRecord,
-        dropzoneTargetID,
-        draggableTargetID,
-      )
+      {
+        dropzoneRecord: record,
+        dropzoneTargetID: dropzoneTargetID,
+        draggableTargetID: draggableTargetID,
+      },
+      // () => console.log("this is where the function would run")
+      () => {
+        if(!this.context.show_relational_create_triggered) {
+          this.context.loadRelationalRecords(
+          this.state.dropzoneRecord,
+          this.state.draggableRecord,
+          this.state.dropzoneTargetID,
+          this.state.draggableTargetID,
+          )
+        }
+      }
     )
     // console.log('inscribedDropzoneRecord is: ', this.state.dropzoneRecord)
   }
@@ -121,8 +134,8 @@ export default class Interactable extends Component {
 
     if (this.props.dropzone) {
         this.interact.dropzone(this.props.dropzoneOptions)
-        .on('drop', async (event) => {
-          await this.inscribeDropzoneRecord(this.props.record, event.target.id, event.relatedTarget.id)
+        .on('drop', (event) => {
+          this.inscribeDropzoneRecord(this.props.record, event.target.id, event.relatedTarget.id)
           // console.log(`from within draw function, dropzoneRecord is ${this.state.dropzoneRecord}, draggableRecord is ${this.state.draggableRecord}`)
           // console.log("Draggable: ", this.state.draggableRecord)
           // console.log("Dropzone: ", this.state.dropzoneRecord)

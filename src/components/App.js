@@ -33,10 +33,11 @@ class App extends Component {
 
       shown_record: {},
       show_relational_create: false,
+      show_relational_create_triggered: false,
       dropzone_record: {},
       draggable_record: {},
-      dropzone_target_ID: '',
-      draggable_target_ID: '',
+      // dropzone_target_ID: '',
+      // draggable_target_ID: '',
 
       ownership_lines: [],
       employment_lines: [],
@@ -52,6 +53,8 @@ class App extends Component {
     this.populateEmploymentLines = this.populateEmploymentLines.bind(this)
     this.populateOfficerLines = this.populateOfficerLines.bind(this)
     this.populateDirectorLines = this.populateDirectorLines.bind(this)
+
+    this.loadRelationalRecords = this.loadRelationalRecords.bind(this)
   }
 
   // Backend Axios API functions
@@ -140,12 +143,14 @@ class App extends Component {
   }
 
   loadRelationalRecords = (dropzoneRecord, draggableRecord, dropzoneTargetID, draggableTargetID) => {
+    console.log("Within the loadRelationalRecords function")
     this.setState({
         dropzone_record: dropzoneRecord,
         draggable_record: draggableRecord,
         dropzone_target_ID: dropzoneTargetID,
         draggable_target_ID: draggableTargetID,
         show_relational_create: true,
+        show_relational_create_triggered: true,
       })
   }
 
@@ -310,18 +315,19 @@ class App extends Component {
             employment_relations: this.state.employment_relations,
             officer_relations: this.state.officer_relations,
             director_relations: this.state.director_relations,
-            getAllRecords: this.getAllRecords,
+            getAllRecords: () => this.getAllRecords(),
 
             // state entry for NavPanel shown record
 
             shown_record: this.state.shown_record,
             show_relational_create: this.state.show_relational_create,
+            show_relational_create_triggered: this.state.show_relational_create_triggered,
             dropzone_record: this.state.dropzone_record,
             draggable_record: this.state.draggable_record,
-            dropzone_target_ID: this.state.dropzone_target_ID,
-            draggable_target_ID: this.state.draggable_target_ID,      
+            // dropzone_target_ID: this.state.dropzone_target_ID,
+            // draggable_target_ID: this.state.draggable_target_ID,      
             updateShownRecord: (record) => this.updateShownRecord(record),
-            loadRelationalRecords: this.loadRelationalRecords,
+            loadRelationalRecords: (dropzoneRecord, draggableRecord, dropzoneTargetID, draggableTargetID) => this.loadRelationalRecords(dropzoneRecord, draggableRecord, dropzoneTargetID, draggableTargetID),
 
             // state entries for lines rendering
             ownership_lines: this.state.ownership_lines,
