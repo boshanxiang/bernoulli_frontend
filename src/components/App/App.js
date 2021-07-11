@@ -7,6 +7,9 @@ import Sandbox from '../Sandbox/Sandbox' //Main interactable panel on right side
 import NavPanel from '../NavPanel/NavPanel' //Main panel for CRUD operations
 import GetAllRecords from '../GetAllRecords/GetAllRecords'; //Button for refreshing all records
 
+// Import Utilities
+import extractIDFromString from '../Utils/extractIDFromString';
+
 // Import Context
 import { AllRecordsContext } from '../Context/RecordsContext'; //Context
 
@@ -101,7 +104,6 @@ class App extends Component {
       this.getOfficerRelations()
       this.getDirectorRelations()
   }
-
   
   // State management functions
 
@@ -164,25 +166,74 @@ class App extends Component {
 
   populateOwnershipLines = () => {
     let linesArray = [];
-    // 
-    this.setState({ownership_lines: linesArray})
+ 
+    console.log("this.state.equity_tokens is: ", this.state.equity_tokens)
+
+    this.state.equity_tokens.forEach((equity_token) => {
+      
+      let fromIdentifier = extractIDFromString(equity_token.issuing_entity);
+      let toIdentifier = '';
+
+      if(equity_token.legal_entity_holder) {
+        toIdentifier = extractIDFromString(equity_token.legal_entity_holder);
+      } else if (equity_token.natural_person_holder) {
+        toIdentifier = extractIDFromString(equity_token.natural_person_holder);
+      }
+
+      linesArray.push({from: fromIdentifier, to: toIdentifier});
+    })
+
+    console.log("ownership_lines in State is the following linesArray: ", linesArray);
+
+    this.setState({ownership_lines: linesArray});
+
   }
 
   populateEmploymentLines = () => {
     let linesArray = [];
-    // 
+
+    this.state.employment_relations.forEach((employment_relation) => {
+
+      let fromIdentifier = extractIDFromString(employment_relation.employee);
+      let toIdentifier = extractIDFromString(employment_relation.employer);
+
+      linesArray.push({from: fromIdentifier, to: toIdentifier});
+    })
+
+    console.log("employment_lines in State is the following linesArray: ", linesArray);
+
     this.setState({employment_lines: linesArray})
   }
 
   populateOfficerLines = () => {
     let linesArray = [];
-    // 
+        
+    this.state.officer_relations.forEach((officer_relation) => {
+
+      let fromIdentifier = extractIDFromString(officer_relation.officer);
+      let toIdentifier = extractIDFromString(officer_relation.company);
+
+      linesArray.push({from: fromIdentifier, to: toIdentifier});
+    })
+
+    console.log("officer_lines in State is the following linesArray: ", linesArray);
+ 
     this.setState({officer_lines: linesArray})
   }
 
   populateDirectorLines = () => {
     let linesArray = [];
-    // 
+    
+    this.state.director_relations.forEach((director_relation) => {
+
+      let fromIdentifier = extractIDFromString(director_relation.director);
+      let toIdentifier = extractIDFromString(director_relation.company);
+
+      linesArray.push({from: fromIdentifier, to: toIdentifier});
+    })
+
+    console.log("director_lines in State is the following linesArray: ", linesArray);
+
     this.setState({director_lines: linesArray})
   }
 
@@ -193,8 +244,8 @@ class App extends Component {
     this.populateDirectorLines();
   }
 
-  componentDidMount = () => {
-    this.getAllRecords();
+  UNSAFE_componentWillMount = async () => {
+    await this.getAllRecords();
     this.getAllLines();
   }
 
@@ -230,6 +281,7 @@ class App extends Component {
             populateDirectorLines: () => this.populateDirectorLines(),
           }}
           >
+          <button onClick={() => this.getAllLines()}>Get All Lines </button>
           <div className="App">
             <NavPanel
               handleAddRecord={this.handleAddRecord}
