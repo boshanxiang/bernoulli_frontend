@@ -1,6 +1,6 @@
 import {Component} from 'react'
-import { AllRecordsContext } from '../Context/RecordsContext';
-import "../styles.css";
+import { AllRecordsContext } from './RecordsContext';
+import "./styles.css";
 
 class ShowBox extends Component {
 

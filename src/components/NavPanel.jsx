@@ -1,11 +1,11 @@
 import {Component} from 'react'
 import axios from 'axios';
 
-import "../styles.css";
-import { AllRecordsContext } from '../Context/RecordsContext';
-import ShowBox from '../ShowBox/ShowBox';
-import EditBox from '../EditBox/EditBox';
-import CreateBox from '../CreateBox/CreateBox';
+import "./styles.css";
+import { AllRecordsContext } from './RecordsContext';
+import ShowBox from './ShowBox';
+import EditBox from './EditBox';
+import CreateBox from './CreateBox';
 
 const baseURL = 'http://localhost:8000/'
 

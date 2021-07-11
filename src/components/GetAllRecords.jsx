@@ -1,5 +1,5 @@
 import {Component} from 'react'
-import { AllRecordsContext } from '../Context/RecordsContext'
+import { AllRecordsContext } from './RecordsContext'
 
 class GetAllRecords extends Component {
     render() {

@@ -90,7 +90,7 @@ export default class Interactable extends Component {
     this.setInteractions();
   }
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this.interact = interact(findDOMNode(this.node));
     this.setInteractions();
   }

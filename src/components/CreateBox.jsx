@@ -1,10 +1,10 @@
 import {Component} from 'react'
 import axios from 'axios';
 
-import { AllRecordsContext } from '../Context/RecordsContext';
-import { getCurrentDate } from '../Utils/CurrentDate';
+import { AllRecordsContext } from './RecordsContext';
+import { getCurrentDate } from './CurrentDate';
 
-import "../styles.css";
+import "./styles.css";
 
 const baseURL = 'http://localhost:8000/'
 

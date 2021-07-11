@@ -3,18 +3,18 @@ import {Component} from 'react'; //React
 import axios from 'axios'; //Axios
 
 // Import Components
-import Sandbox from '../Sandbox/Sandbox' //Main interactable panel on right side
-import NavPanel from '../NavPanel/NavPanel' //Main panel for CRUD operations
-import GetAllRecords from '../GetAllRecords/GetAllRecords'; //Button for refreshing all records
+import Sandbox from './Sandbox' //Main interactable panel on right side
+import NavPanel from './NavPanel' //Main panel for CRUD operations
+import GetAllRecords from './GetAllRecords'; //Button for refreshing all records
 
 // Import Utilities
-import extractIDFromString from '../Utils/extractIDFromString';
+import extractIDFromString from './extractIDFromString';
 
 // Import Context
-import { AllRecordsContext } from '../Context/RecordsContext'; //Context
+import { AllRecordsContext } from './RecordsContext'; //Context
 
 // Import CSS
-import '../styles.css' //Styles repository
+import './styles.css' //Styles repository
 
 const baseURL = 'http://localhost:8000/'
 
@@ -42,6 +42,10 @@ class App extends Component {
     this.handleAddRecord = this.handleAddRecord.bind(this)
     this.handleUpdateRecord = this.handleUpdateRecord.bind(this)
     this.handleDeleteRecord = this.handleDeleteRecord.bind(this)
+    this.populateOwnershipLines = this.populateOwnershipLines.bind(this)
+    this.populateEmploymentLines = this.populateEmploymentLines.bind(this)
+    this.populateOfficerLines = this.populateOfficerLines.bind(this)
+    this.populateDirectorLines = this.populateDirectorLines.bind(this)
   }
 
   // Backend Axios API functions
@@ -49,49 +53,63 @@ class App extends Component {
   getLegalEntities = () => {
     axios
       .get(baseURL + 'legalentities/')
-      .then((res) => this.setState({legal_entities: res.data}))
+      .then((res) => this.setState({legal_entities: res.data}, function() {
+        this.getAllLines()
+      }))
       .catch((err) => console.log(err));
   }
 
   getNaturalPersons = () => {
     axios
     .get(baseURL + 'naturalpersons/')
-    .then((res) => this.setState({natural_persons: res.data}))
+    .then((res) => this.setState({natural_persons: res.data}, function() {
+      this.getAllLines()
+    }))
     .catch((err) => console.log(err));
   }
 
   getEquityClasses = () => {
     axios
     .get(baseURL + 'equityclasses/')
-    .then((res) => this.setState({equity_classes: res.data}))
+    .then((res) => this.setState({equity_classes: res.data}, function() {
+      this.getAllLines()
+    }))
     .catch((err) => console.log(err));
   }
 
   getEquityTokens = () => {
     axios
     .get(baseURL + 'equitytokens/')
-    .then((res) => this.setState({equity_tokens: res.data}))
+    .then((res) => this.setState({equity_tokens: res.data}, function() {
+      this.getAllLines()
+    }))
     .catch((err) => console.log(err));
   }
 
   getEmploymentRelations = () => {
     axios
     .get(baseURL + 'employmentrelations/')
-    .then((res) => this.setState({employment_relations: res.data}))
+    .then((res) => this.setState({employment_relations: res.data}, function() {
+      this.getAllLines()
+    }))
     .catch((err) => console.log(err));
   }
 
   getOfficerRelations = () => {
     axios
     .get(baseURL + 'directorrelations/')
-    .then((res) => this.setState({director_relations: res.data}))
+    .then((res) => this.setState({director_relations: res.data}, function() {
+      this.getAllLines()
+    }))
     .catch((err) => console.log(err));
   }
 
   getDirectorRelations = () => {
     axios
     .get(baseURL + 'employmentrelations/')
-    .then((res) => this.setState({employment_relations: res.data}))
+    .then((res) => this.setState({employment_relations: res.data}, function() {
+      this.getAllLines()
+    }))
     .catch((err) => console.log(err));
   }
 
@@ -164,32 +182,34 @@ class App extends Component {
     }
   }
 
-  populateOwnershipLines = () => {
+  populateOwnershipLines() {
     let linesArray = [];
  
     console.log("this.state.equity_tokens is: ", this.state.equity_tokens)
 
     this.state.equity_tokens.forEach((equity_token) => {
       
-      let fromIdentifier = extractIDFromString(equity_token.issuing_entity);
-      let toIdentifier = '';
+      let toIdentifier = extractIDFromString(equity_token.issuing_entity);
+      let fromIdentifier = '';
 
       if(equity_token.legal_entity_holder) {
-        toIdentifier = extractIDFromString(equity_token.legal_entity_holder);
+        fromIdentifier = extractIDFromString(equity_token.legal_entity_holder);
       } else if (equity_token.natural_person_holder) {
-        toIdentifier = extractIDFromString(equity_token.natural_person_holder);
+        fromIdentifier = extractIDFromString(equity_token.natural_person_holder);
       }
 
       linesArray.push({from: fromIdentifier, to: toIdentifier});
+      
     })
 
+    
     console.log("ownership_lines in State is the following linesArray: ", linesArray);
 
     this.setState({ownership_lines: linesArray});
 
   }
 
-  populateEmploymentLines = () => {
+  populateEmploymentLines() {
     let linesArray = [];
 
     this.state.employment_relations.forEach((employment_relation) => {
@@ -205,7 +225,7 @@ class App extends Component {
     this.setState({employment_lines: linesArray})
   }
 
-  populateOfficerLines = () => {
+  populateOfficerLines() {
     let linesArray = [];
         
     this.state.officer_relations.forEach((officer_relation) => {
@@ -221,7 +241,7 @@ class App extends Component {
     this.setState({officer_lines: linesArray})
   }
 
-  populateDirectorLines = () => {
+  populateDirectorLines() {
     let linesArray = [];
     
     this.state.director_relations.forEach((director_relation) => {
@@ -244,8 +264,8 @@ class App extends Component {
     this.populateDirectorLines();
   }
 
-  UNSAFE_componentWillMount = async () => {
-    await this.getAllRecords();
+  UNSAFE_componentWillMount = () => {
+    this.getAllRecords();
     this.getAllLines();
   }
 
