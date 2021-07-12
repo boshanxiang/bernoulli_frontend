@@ -66,25 +66,6 @@ class CreateBox extends Component {
           }}
         )
         .then((res) => this.props.handleAddRecord(res.data))
-
-        // event.preventDefault()
-        // fetch(baseURL + recordType, {
-        //   method: 'POST',
-        //   body: JSON.stringify(postObject),
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   }
-        // }).then(res => res.json())
-        //   .then(resJson => {
-        //     this.props.handleAddRecord(resJson)
-        //     this.setState({
-        //         entity: null,
-        //         name: '',
-        //         state: '',
-        //         entitytype: ''
-        //     })
-        //   })
-        //   .catch(error => console.log({ 'Error': error }))
     }
 
     render() {

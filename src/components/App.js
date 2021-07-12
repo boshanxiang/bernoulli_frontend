@@ -106,8 +106,8 @@ class App extends Component {
 
   getOfficerRelations = () => {
     axios
-    .get(baseURL + 'directorrelations/')
-    .then((res) => this.setState({director_relations: res.data}, function() {
+    .get(baseURL + 'officerrelations/')
+    .then((res) => this.setState({officer_relations: res.data}, function() {
       this.getAllLines()
     }))
     .catch((err) => console.log(err));
@@ -115,8 +115,8 @@ class App extends Component {
 
   getDirectorRelations = () => {
     axios
-    .get(baseURL + 'employmentrelations/')
-    .then((res) => this.setState({employment_relations: res.data}, function() {
+    .get(baseURL + 'directorrelations/')
+    .then((res) => this.setState({director_relations: res.data}, function() {
       this.getAllLines()
     }))
     .catch((err) => console.log(err));
@@ -143,7 +143,6 @@ class App extends Component {
   }
 
   loadRelationalRecords = (dropzoneRecord, draggableRecord, dropzoneTargetID, draggableTargetID) => {
-    console.log("Within the loadRelationalRecords function")
     this.setState({
         dropzone_record: dropzoneRecord,
         draggable_record: draggableRecord,
@@ -154,20 +153,10 @@ class App extends Component {
       })
   }
 
-
-  // inscribeDraggableRecord = (draggableRecord) => {
-  //   this.setState({draggable_record: draggableRecord})
-  // }
-
-  // inscribeDropzoneRecord= (dropzoneRecord) => {
-  //   this.setState({dropzone_record: dropzoneRecord})
-  // }
-
   // State management functions for NavPanel manipulations
 
   handleAddRecord(record) {
-    console.log("record: ", record)
-    console.log("typeOf Record: ", record)
+
     if(record.entity_name){
       let copyLegalEntities = this.state.legal_entities
       let revisedLegalEntities = [...copyLegalEntities, record]
@@ -214,11 +203,23 @@ class App extends Component {
     }
   }
 
+  // Functions for relational records
+  handleAddRelationalRecord = (record) => {
+    return
+  }
+
+  handleUpdateRelationalRecord = (record) => {
+    return
+  }
+
+  handleDeleteRelationalRecord = (record) => {
+    return
+  }
+
+  // Fucntions to populate lines
   populateOwnershipLines() {
     let linesArray = [];
  
-    console.log("this.state.equity_tokens is: ", this.state.equity_tokens)
-
     this.state.equity_tokens.forEach((equity_token) => {
       
       let toIdentifier = extractIDFromString(equity_token.issuing_entity);
@@ -233,9 +234,6 @@ class App extends Component {
       linesArray.push({from: fromIdentifier, to: toIdentifier});
       
     })
-
-    
-    console.log("ownership_lines in State is the following linesArray: ", linesArray);
 
     this.setState({ownership_lines: linesArray});
 
@@ -252,8 +250,6 @@ class App extends Component {
       linesArray.push({from: fromIdentifier, to: toIdentifier});
     })
 
-    console.log("employment_lines in State is the following linesArray: ", linesArray);
-
     this.setState({employment_lines: linesArray})
   }
 
@@ -267,8 +263,6 @@ class App extends Component {
 
       linesArray.push({from: fromIdentifier, to: toIdentifier});
     })
-
-    console.log("officer_lines in State is the following linesArray: ", linesArray);
  
     this.setState({officer_lines: linesArray})
   }
@@ -283,8 +277,6 @@ class App extends Component {
 
       linesArray.push({from: fromIdentifier, to: toIdentifier});
     })
-
-    console.log("director_lines in State is the following linesArray: ", linesArray);
 
     this.setState({director_lines: linesArray})
   }
@@ -349,6 +341,9 @@ class App extends Component {
               updateShownRecord={this.updateShownRecord}
               clearShownRecord={this.clearShownRecord}
 
+              handleAddRelationalRecord = {this.handleAddRelationalRecord}
+              handleUpdateRelationalRecord = {this.handleUpdateRelationalRecord}
+              handleDeleteRelationalRecord = {this.handleDeleteRelationalRecord}
               // inscribeDraggableRecord={this.inscribeDraggableRecord}
               // inscribeDropzoneRecord={this.inscribeDropzoneRecord}
             />

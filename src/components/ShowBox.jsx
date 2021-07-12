@@ -9,7 +9,7 @@ class ShowBox extends Component {
     render() {
         
         return (
-        <div>
+        <div className="show_container">
             {(this.context.shown_record.entity_name || this.context.shown_record.full_name) ?
                 <div>
                     <h3>Selected Entry</h3>

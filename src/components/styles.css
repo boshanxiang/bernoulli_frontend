@@ -1,6 +1,13 @@
+/* Borders management */
 * {
   border: 1px solid black;
 }
+
+.lines-no-border * {
+  border: none;
+}
+
+/* General styling */
 
 .html {
   color: black;
@@ -16,17 +23,22 @@ h2, p {
   margin: 0
 }
 
+/* Styling for main components under App */
+
 .list_container{
   float: left;
   overflow:scroll;
   height: 100%;
-  width: 15%;
+  width: 20%;
   margin: 2%;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
 }
 
 .sandbox{
   float: right;
-  width: 80%;
+  width: 75%;
   height: 100%;
 }
 
@@ -50,6 +62,10 @@ h2, p {
   transform: translate(0px, 0px);
 
   display:inline-block;
+}
+
+.drag-item-legal-entity {
+  background-color: green;
 }
 
 #outer-dropzone {

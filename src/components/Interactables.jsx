@@ -136,9 +136,6 @@ export default class Interactable extends Component {
         this.interact.dropzone(this.props.dropzoneOptions)
         .on('drop', (event) => {
           this.inscribeDropzoneRecord(this.props.record, event.target.id, event.relatedTarget.id)
-          // console.log(`from within draw function, dropzoneRecord is ${this.state.dropzoneRecord}, draggableRecord is ${this.state.draggableRecord}`)
-          // console.log("Draggable: ", this.state.draggableRecord)
-          // console.log("Dropzone: ", this.state.dropzoneRecord)
         })
     }
 

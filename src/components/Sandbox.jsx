@@ -29,7 +29,6 @@ class Sandbox extends Component {
     if(findIndex < 0) {
       let copyLines = this.state.lines;
       let revisedLines = [...copyLines, {'from': dropzoneElementID, 'to': draggableElementID}]
-      // console.log(`revisedLines: ${revisedLines}`)
       this.setState({lines: revisedLines});
     }
   }
@@ -41,41 +40,44 @@ class Sandbox extends Component {
       <div className="sandbox">
         <GetAllRecords/>
         <h3>Natural Persons</h3>
-          {this.context.natural_persons.map((natural_person) => {
-              return(
-              <Interactable
+        {this.context.natural_persons.map((natural_person) => {
+          return(
+
+            <Interactable
+
+              key={'natural_person' + natural_person.id}
+
+              draggable={true}
+              draggableOptions={draggableOptions}
+              resizable={true}
+              resizableOptions={resizableOptions}
+              dropzone={true}
+              dropzoneOptions={dropzoneOptions}
   
-                key={'natural_person' + natural_person.id}
+              record={natural_person}
+              // inscribeDraggableRecord = {this.props.inscribeDraggableRecord}
+              // inscribeDropzoneRecord = {this.props.inscribeDropzoneRecord}
 
-                draggable={true}
-                draggableOptions={draggableOptions}
-                resizable={true}
-                resizableOptions={resizableOptions}
-                dropzone={true}
-                dropzoneOptions={dropzoneOptions}
-    
-                record={natural_person}
-                // inscribeDraggableRecord = {this.props.inscribeDraggableRecord}
-                // inscribeDropzoneRecord = {this.props.inscribeDropzoneRecord}
+              drawLines={this.drawLines}
 
-                drawLines={this.drawLines}
+              style={{zIndex:'1'}}
+            >
+                <div
+                  className={`draggable drag-item natural_person${natural_person.id}`}
+                  onClick={(event) => this.context.updateShownRecord(natural_person)}
+                  id={'natural_person' + natural_person.id}
+                  style={{zIndex:'1'}}
+                >
+                <h2>{natural_person.full_name}</h2>
+                <p> State of Residence: {natural_person.residency_state}</p>
+                </div>
+            </Interactable>
+          )
 
-                style={{zIndex:'1'}}
-              >
-                  <div
-                    className={`draggable drag-item natural_person${natural_person.id}`}
-                    onClick={(event) => this.context.updateShownRecord(natural_person)}
-                    id={'natural_person' + natural_person.id}
-                    style={{zIndex:'1'}}
-                  >
-                  <h2>{natural_person.full_name}</h2>
-                  <p> State of Residence: {natural_person.residency_state}</p>
-                  </div>
-              </Interactable>
-              )
-          })}
-          <br/>
-{/* 
+        })}
+
+        <br/>
+
         <LinesRender
           elements={this.context.ownership_lines}
           stringprefix='ownership_line'
@@ -91,43 +93,47 @@ class Sandbox extends Component {
         <LinesRender
           elements={this.context.director_lines}
           stringprefix='director_line'
-        /> */}
-          <br/>
+        />
+        
+        <br/>
 
-          <h3>Legal Entities</h3>
-          {this.context.legal_entities.map((legal_entity) => {
-              return(
-              <Interactable
-                key={'legal_entity' + legal_entity.id}  
-                
-                draggable={true}
-                draggableOptions={draggableOptions}
-                resizable={true}
-                resizableOptions={resizableOptions}
-                dropzone={true}
-                dropzoneOptions={dropzoneOptions}
+        <h3>Legal Entities</h3>
+        {this.context.legal_entities.map((legal_entity) => {
+          return(
 
-                record={legal_entity}
-                // inscribeDraggableRecord = {this.props.inscribeDraggableRecord}
-                // inscribeDropzoneRecord = {this.props.inscribeDropzoneRecord}
-                
-                drawLines={this.drawLines}
+            <Interactable
+              key={'legal_entity' + legal_entity.id}  
+              
+              draggable={true}
+              draggableOptions={draggableOptions}
+              resizable={true}
+              resizableOptions={resizableOptions}
+              dropzone={true}
+              dropzoneOptions={dropzoneOptions}
 
-                style={{zIndex:'1'}}
-              >
-                  <div
-                    className={`draggable drag-item legal_entity${legal_entity.id}`}
-                    onClick={(event) => this.context.updateShownRecord(legal_entity)}
-                    id={'legal_entity' + legal_entity.id}
-                    style={{zIndex:'1'}}
-                  >
-                  <h2>{legal_entity.entity_name}</h2>
-                  <p> Entity Type: {legal_entity.entity_type}</p>
-                  <p> State of Formation: {legal_entity.state_of_formation}</p>
-                  </div>
-              </Interactable>
-              )
-          })}
+              record={legal_entity}
+              // inscribeDraggableRecord = {this.props.inscribeDraggableRecord}
+              // inscribeDropzoneRecord = {this.props.inscribeDropzoneRecord}
+              
+              drawLines={this.drawLines}
+
+              style={{zIndex:'1'}}
+            >
+                <div
+                  className={`draggable drag-item legal_entity${legal_entity.id} drag-item-legal-entity`}
+                  onClick={(event) => this.context.updateShownRecord(legal_entity)}
+                  id={'legal_entity' + legal_entity.id}
+                  style={{zIndex:'1'}}
+                >
+                <h2>{legal_entity.entity_name}</h2>
+                <p> Entity Type: {legal_entity.entity_type}</p>
+                <p> State of Formation: {legal_entity.state_of_formation}</p>
+                </div>
+            </Interactable>
+          )
+
+        })}
+        
       </div>
     )
   }

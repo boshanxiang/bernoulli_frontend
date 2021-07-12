@@ -74,11 +74,11 @@ class LinesRender extends Component {
           // Style const is for stepped lines
 
         return(
-            <div>
+            <div className="lines-no-border">
                 {this.props.elements
                     .map(
                         (element) => {
-                            console.log(`SteppedLine from ${element.from} to ${element.to}`)
+                            // console.log(`SteppedLine from ${element.from} to ${element.to}`)
                             return(
                             <SteppedLineTo
                                 key={this.getSteppedLineKey(this.props.stringprefix)}

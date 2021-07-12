@@ -6,10 +6,13 @@ import { AllRecordsContext } from './RecordsContext';
 import ShowBox from './ShowBox';
 import EditBox from './EditBox';
 import CreateBox from './CreateBox';
+import RelationalCreate from './RelationalCreate';
 
 const baseURL = 'http://localhost:8000/'
 
 class NavPanel extends Component {
+
+    static contextType = AllRecordsContext
 
     constructor(props) {
         super(props)
@@ -76,6 +79,16 @@ class NavPanel extends Component {
                         :
                         <></>
                 )
+            }
+            {
+                (this.context.show_relational_create) ?
+                    <RelationalCreate
+                        record1 = {this.context.dropzone_record}
+                        record2 = {this.context.draggable_record}
+                        handleAddRelationalRecord = {this.props.handleAddRelationalRecord}
+                    />
+                    :
+                    <></>
             }
         </div>
         )
