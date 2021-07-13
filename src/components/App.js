@@ -17,7 +17,7 @@ import { AllRecordsContext } from './RecordsContext'; //Context
 import './styles.css' //Styles repository
 
 const baseURL = (
-  (process.env.NODE_ENV === 'production') ?
+  (process.env.ENVIRO === 'production') ?
 
       'http://bernoullibackend.herokuapp.com'
       :
@@ -25,7 +25,7 @@ const baseURL = (
 
 );
 
-console.log("process.env.NODE_ENV is: ", process.env.NODE_ENV)
+console.log("process.env.ENVIRO is: ", process.env.ENVIRO)
 
 class App extends Component {
   constructor(props) {
