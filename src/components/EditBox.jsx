@@ -6,7 +6,12 @@ import { getCurrentDate } from './CurrentDate';
 
 import "./styles.css";
 
-import baseURL from './BaseURLs'
+const baseURL = (
+    (process.env.NODE_ENV) ?
+        'http://localhost:8000'
+        :
+        'http://bernoullibackend.herokuapp.com'
+);
 
 class CreateBox extends Component {
     constructor(props) {

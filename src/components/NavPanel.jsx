@@ -8,7 +8,12 @@ import EditBox from './EditBox';
 import CreateBox from './CreateBox';
 import RelationalCreate from './RelationalCreate';
 
-import baseURL from './BaseURLs'
+const baseURL = (
+    (process.env.NODE_ENV) ?
+        'http://localhost:8000'
+        :
+        'http://bernoullibackend.herokuapp.com'
+);
 
 class NavPanel extends Component {
 

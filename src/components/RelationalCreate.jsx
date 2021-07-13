@@ -3,7 +3,12 @@ import { getCurrentDate } from './CurrentDate'
 import { AllRecordsContext } from './RecordsContext'
 import axios from 'axios'
 
-import baseURL from './BaseURLs'
+const baseURL = (
+    (process.env.NODE_ENV) ?
+        'http://localhost:8000'
+        :
+        'http://bernoullibackend.herokuapp.com'
+);
 
 class RelationalCreate extends Component {
     
