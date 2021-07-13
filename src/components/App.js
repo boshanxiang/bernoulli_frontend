@@ -25,6 +25,8 @@ const baseURL = (
 
 );
 
+console.log("process.env.NODE_ENV is: ", process.env.NODE_ENV)
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -223,7 +225,7 @@ class App extends Component {
     return
   }
 
-  // Fucntions to populate lines
+  // Functions to populate lines
   populateOwnershipLines() {
     let linesArray = [];
  
