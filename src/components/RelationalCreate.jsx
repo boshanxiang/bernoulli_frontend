@@ -4,11 +4,13 @@ import { AllRecordsContext } from './RecordsContext'
 import axios from 'axios'
 
 const baseURL = (
-    (process.env.NODE_ENV) ?
-        'http://localhost:8000'
-        :
+    (process.env.NODE_ENV === 'production') ?
+  
         'http://bernoullibackend.herokuapp.com'
-);
+        :
+        'http://localhost:8000'
+  
+  );
 
 class RelationalCreate extends Component {
     

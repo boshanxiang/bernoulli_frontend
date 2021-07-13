@@ -9,11 +9,13 @@ import CreateBox from './CreateBox';
 import RelationalCreate from './RelationalCreate';
 
 const baseURL = (
-    (process.env.NODE_ENV) ?
-        'http://localhost:8000'
-        :
+    (process.env.NODE_ENV === 'production') ?
+  
         'http://bernoullibackend.herokuapp.com'
-);
+        :
+        'http://localhost:8000'
+  
+  );
 
 class NavPanel extends Component {
 
