@@ -7,13 +7,13 @@ import { getCurrentDate } from './CurrentDate';
 import "./styles.css";
 
 const baseURL = (
-    (process.env.NODE_ENV === 'production') ?
+    (process.env.REACT_APP_ENVIRO) ?
   
         'http://bernoullibackend.herokuapp.com'
         :
         'http://localhost:8000'
   
-  );
+  );  
 
 class CreateBox extends Component {
     constructor(props) {
