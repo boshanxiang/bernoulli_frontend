@@ -17,10 +17,12 @@ import { AllRecordsContext } from './RecordsContext'; //Context
 import './styles.css' //Styles repository
 
 const baseURL = (
-  (process.env.NODE_ENV) ?
-      'http://localhost:8000'
-      :
+  (process.env.NODE_ENV === 'production') ?
+
       'http://bernoullibackend.herokuapp.com'
+      :
+      'http://localhost:8000'
+
 );
 
 class App extends Component {
