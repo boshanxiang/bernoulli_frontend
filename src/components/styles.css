@@ -1,11 +1,11 @@
 /* Borders management */
-* {
+/* * {
   border: 1px solid black;
 }
 
 .lines-no-border * {
   border: none;
-}
+} */
 
 /* General styling */
 

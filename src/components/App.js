@@ -25,7 +25,7 @@ const baseURL = (
 
 );
 
-console.log("process.env.ENVIRO is: ", process.env.ENVIRO)
+console.log("process.env.REACT_APP_ENVIRO is: ", process.env.REACT_APP_ENVIRO)
 
 class App extends Component {
   constructor(props) {
@@ -343,7 +343,6 @@ class App extends Component {
           >
           <button onClick={() => this.getAllLines()}>Get All Lines </button>
           <div className="App">
-            <h1>{baseURL}</h1>
             <NavPanel
               handleAddRecord={this.handleAddRecord}
               handleUpdateRecord={this.handleUpdateRecord}
