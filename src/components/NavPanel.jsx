@@ -8,7 +8,7 @@ import EditBox from './EditBox';
 import CreateBox from './CreateBox';
 import RelationalCreate from './RelationalCreate';
 
-const baseURL = 'http://localhost:8000/'
+import baseURL from './BaseURLS'
 
 class NavPanel extends Component {
 

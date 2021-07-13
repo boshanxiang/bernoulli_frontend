@@ -16,7 +16,7 @@ import { AllRecordsContext } from './RecordsContext'; //Context
 // Import CSS
 import './styles.css' //Styles repository
 
-const baseURL = 'http://localhost:8000/'
+import baseURL from './BaseURLS'
 
 class App extends Component {
   constructor(props) {

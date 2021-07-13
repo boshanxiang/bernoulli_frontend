@@ -3,7 +3,7 @@ import { getCurrentDate } from './CurrentDate'
 import { AllRecordsContext } from './RecordsContext'
 import axios from 'axios'
 
-const baseURL = 'http://localhost:8000/'
+import baseURL from './BaseURLS'
 
 class RelationalCreate extends Component {
     
