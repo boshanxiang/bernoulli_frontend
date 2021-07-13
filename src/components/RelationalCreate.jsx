@@ -6,7 +6,7 @@ import axios from 'axios'
 const baseURL = (
     (process.env.REACT_APP_ENVIRO) ?
   
-        'http://bernoullibackend.herokuapp.com'
+        'https://bernoullibackend.herokuapp.com'
         :
         'http://localhost:8000'
   
