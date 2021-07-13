@@ -3,7 +3,7 @@ import { getCurrentDate } from './CurrentDate'
 import { AllRecordsContext } from './RecordsContext'
 import axios from 'axios'
 
-import baseURL from './BaseURLS'
+import baseURL from './BaseURLs'
 
 class RelationalCreate extends Component {
     
@@ -74,7 +74,7 @@ class RelationalCreate extends Component {
 
         axios
         .post(
-            `${baseURL}${this.state.recordType}/`,
+            `${baseURL}/${this.state.recordType}/`,
             postObject,
             {headers: {
             'Content-Type': 'application/json'

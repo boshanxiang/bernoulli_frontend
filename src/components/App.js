@@ -16,7 +16,7 @@ import { AllRecordsContext } from './RecordsContext'; //Context
 // Import CSS
 import './styles.css' //Styles repository
 
-import baseURL from './BaseURLS'
+import baseURL from './BaseURLs'
 
 class App extends Component {
   constructor(props) {
@@ -61,7 +61,7 @@ class App extends Component {
 
   getLegalEntities = () => {
     axios
-      .get(baseURL + 'legalentities/')
+      .get(baseURL + '/legalentities/')
       .then((res) => this.setState({legal_entities: res.data}, function() {
         this.getAllLines()
       }))
@@ -70,7 +70,7 @@ class App extends Component {
 
   getNaturalPersons = () => {
     axios
-    .get(baseURL + 'naturalpersons/')
+    .get(baseURL + '/naturalpersons/')
     .then((res) => this.setState({natural_persons: res.data}, function() {
       this.getAllLines()
     }))
@@ -79,7 +79,7 @@ class App extends Component {
 
   getEquityClasses = () => {
     axios
-    .get(baseURL + 'equityclasses/')
+    .get(baseURL + '/equityclasses/')
     .then((res) => this.setState({equity_classes: res.data}, function() {
       this.getAllLines()
     }))
@@ -88,7 +88,7 @@ class App extends Component {
 
   getEquityTokens = () => {
     axios
-    .get(baseURL + 'equitytokens/')
+    .get(baseURL + '/equitytokens/')
     .then((res) => this.setState({equity_tokens: res.data}, function() {
       this.getAllLines()
     }))
@@ -97,7 +97,7 @@ class App extends Component {
 
   getEmploymentRelations = () => {
     axios
-    .get(baseURL + 'employmentrelations/')
+    .get(baseURL + '/employmentrelations/')
     .then((res) => this.setState({employment_relations: res.data}, function() {
       this.getAllLines()
     }))
@@ -106,7 +106,7 @@ class App extends Component {
 
   getOfficerRelations = () => {
     axios
-    .get(baseURL + 'officerrelations/')
+    .get(baseURL + '/officerrelations/')
     .then((res) => this.setState({officer_relations: res.data}, function() {
       this.getAllLines()
     }))
@@ -115,7 +115,7 @@ class App extends Component {
 
   getDirectorRelations = () => {
     axios
-    .get(baseURL + 'directorrelations/')
+    .get(baseURL + '/directorrelations/')
     .then((res) => this.setState({director_relations: res.data}, function() {
       this.getAllLines()
     }))
@@ -334,6 +334,7 @@ class App extends Component {
           >
           <button onClick={() => this.getAllLines()}>Get All Lines </button>
           <div className="App">
+            <h1>{baseURL}</h1>
             <NavPanel
               handleAddRecord={this.handleAddRecord}
               handleUpdateRecord={this.handleUpdateRecord}

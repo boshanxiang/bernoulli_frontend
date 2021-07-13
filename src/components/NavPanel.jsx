@@ -8,7 +8,7 @@ import EditBox from './EditBox';
 import CreateBox from './CreateBox';
 import RelationalCreate from './RelationalCreate';
 
-import baseURL from './BaseURLS'
+import baseURL from './BaseURLs'
 
 class NavPanel extends Component {
 
@@ -43,7 +43,7 @@ class NavPanel extends Component {
         recordType = 'legalentities'
         }
         axios
-        .delete(`${baseURL}${recordType}/${record.id}/`)
+        .delete(`${baseURL}/${recordType}/${record.id}/`)
         .then((res) => this.props.handleDeleteRecord(record))
     }
 

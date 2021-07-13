@@ -6,7 +6,7 @@ import { getCurrentDate } from './CurrentDate';
 
 import "./styles.css";
 
-import baseURL from './BaseURLS'
+import baseURL from './BaseURLs'
 
 class CreateBox extends Component {
     constructor(props) {
@@ -59,7 +59,7 @@ class CreateBox extends Component {
 
         axios
         .post(
-          `${baseURL}${recordType}/`,
+          `${baseURL}/${recordType}/`,
           postObject,
           {headers: {
             'Content-Type': 'application/json'
