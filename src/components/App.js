@@ -17,7 +17,7 @@ import { AllRecordsContext } from './RecordsContext'; //Context
 import './styles.css' //Styles repository
 
 const baseURL = (
-  (process.env.NODE_ENV === 'production') ?
+  (process.env.DEPLOY === 'production') ?
 
       'http://bernoullibackend.herokuapp.com'
       :
